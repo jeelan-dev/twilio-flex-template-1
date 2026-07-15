@@ -14,6 +14,7 @@ import { FlexEvent } from '../../../../types/feature-loader';
 import {
     createSfTicket,
     createSfTask,
+    createSfChatTicket,
     screenPop,
     updateSfTicket,
   } from '../../utils/salesforcehelper';
@@ -49,7 +50,24 @@ export const eventHook = function createCaseAfterTaskAcceptance(
           console.log('acceptedReservation else condition passed No SF Contact recognized ---')
           //screenPop();
     }
-  }
+  }else if (task.taskChannelUniqueName === 'chat') { // Ticket creation for ADA Chats
+      const { sfcontactid, ticketId } = task.attributes;
+      if (ticketId && ticketId !== '') {
+        // Re-assign existing case owner on transfer
+        if (manager.workerClient?.attributes.userId) {
+          updateSfTicket(ticketId, manager.workerClient.attributes.userId);
+          screenPop(ticketId);
+        } else {
+          console.log('Cannot update SF ticket owner. Worker userId missing.');
+        }
+      } else if (sfcontactid && sfcontactid !== '') {
+        // Known contact, no case yet
+        screenPop(sfcontactid);
+        createSfChatTicket(task);
+      } else {
+        // Unknown contact
+        createSfChatTicket(task);
+      }
 }
 /*export const eventHook = async function createCaseAfterTaskAcceptance(
   flex: typeof Flex,

@@ -251,10 +251,44 @@ const createSfTicketmodified = function (task) {
 };
 
 
+/***************ADA GEN AI Chats related logic Start********************/
+ 
+const createSfChatTicket = function (task) {
+  if (window.sforce) {
+    window.sforce.opencti.saveLog({
+      value: {
+        entityApiName: 'Case',
+        Subject: `Inbound Chat from ${task.attributes.First_Name ?? ''} ${task.attributes.Last_Name ?? ''} ${task.dateCreated}`.trim(),
+        Origin: 'Chat',
+        RecordtypeId: '012i00000019r5uAAA',   // same RecordTypeId as voice
+        ContactId: task.attributes.sfcontactid || undefined,
+        Description: `Inbound Chat from ${task.attributes.First_Name ?? ''} ${task.attributes.Last_Name ?? ''} ${task.dateCreated}`.trim(),
+      },
+      callback: (response) => {
+        if (response.success && response.returnValue?.recordId) {
+          const ticketId = response.returnValue.recordId;
+          window.sforce.opencti.screenPop({
+            type: sforce.opencti.SCREENPOP_TYPE.SOBJECT,
+            params: { recordId: ticketId },
+          });
+          try {
+            updateTaskAttributesWithCaseId(task.taskSid, ticketId);
+          } catch (error) {
+            console.error('Failed to update TaskAttributes for chat case:', error);
+          }
+        }
+      },
+    });
+  }
+};
+ 
+/***************ADA GEN AI Chats related logic Ens**********************/
+
 export {
   searchAndScreenPop,
   createSfTicket,
   createSfTask,
   screenPop,
   updateSfTicket,
+  createSfChatTicket,
 }
