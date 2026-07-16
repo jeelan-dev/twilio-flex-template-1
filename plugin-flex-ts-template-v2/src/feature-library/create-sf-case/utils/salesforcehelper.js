@@ -262,11 +262,13 @@ const createSfChatTicket = function (task) {
         Origin: 'Chat',
         RecordtypeId: '012i00000019r5uAAA',   // same RecordTypeId as voice
         ContactId: task.attributes.sfcontactid || undefined,
-        Description: "Inbound Chat from ADA Description",
+        Description: 'Inbound Chat from ADA Description',
       },
       callback: (response) => {
-
+        console.log('createSfChatTicket response' + JSON.stringify(response))
         if (response.success && response.returnValue?.recordId) {
+          
+
           const ticketId = response.returnValue.recordId;
           window.sforce.opencti.screenPop({
             type: sforce.opencti.SCREENPOP_TYPE.SOBJECT,
