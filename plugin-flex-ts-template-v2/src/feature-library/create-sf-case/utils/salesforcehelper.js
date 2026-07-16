@@ -265,7 +265,7 @@ const createSfChatTicket = function (task) {
         Description: "Inbound Chat from ADA Description",
       },
       callback: (response) => {
-        console.
+
         if (response.success && response.returnValue?.recordId) {
           const ticketId = response.returnValue.recordId;
           window.sforce.opencti.screenPop({
