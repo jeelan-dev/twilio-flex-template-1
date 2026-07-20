@@ -42,5 +42,5 @@ export const teamFilter = () =>
       field: <SelectFilter IsMulti={true} />,
       label: <SelectFilterLabel />,
     },
-    condition: 'CONTAINS',
+    condition: 'IN',
   } as FilterDefinition);
