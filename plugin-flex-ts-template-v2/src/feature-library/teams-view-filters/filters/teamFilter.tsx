@@ -27,24 +27,20 @@ import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
   */
 
-  export const teamFilter = () => {
-    const originalOptions = getTeamOptions() as string[]; // Explicitly cast to string[]
-    const uniqueOptions = Array.from(new Set(originalOptions)); // Remove duplicates  
-    return {
-      id: 'data.attributes.team_name',
-      title: (Manager.getInstance().strings as any)[StringTemplates.Team],
-      fieldName: 'teams',
-      options: uniqueOptions
-        .sort()
-        .map((value: string): { value: string; label: string } => ({
-          value,
-          label: value,
-        })),
-      customStructure: {
-        field: <SelectFilter IsMulti={true} />,
-        label: <SelectFilterLabel />,
-      },
-      condition: 'IN',
-    } as FilterDefinition;
-  };
-  
+export const teamFilter = () =>
+  ({
+    id: 'data.attributes.team_name',
+    title: (Manager.getInstance().strings as any)[StringTemplates.Team],
+    fieldName: 'teams',
+    options: getTeamOptions()
+      .sort()
+      .map((value: string) => ({
+        value,
+        label: value,
+      })),
+    customStructure: {
+      field: <SelectFilter IsMulti={true} />,
+      label: <SelectFilterLabel />,
+    },
+    condition: 'IN',
+  } as FilterDefinition);

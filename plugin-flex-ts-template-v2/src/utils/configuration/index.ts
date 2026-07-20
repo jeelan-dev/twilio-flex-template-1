@@ -15,30 +15,24 @@ export const getFeatureFlagsGlobal = () => {
 export const getFeatureFlagsUser = () => {
   const { config_overrides: workerSettings } =
     (manager.workerClient?.attributes as CustomWorkerAttributes) || {};
+
   return workerSettings;
 };
 
 const mergedSettings = merge(globalSettings, getFeatureFlagsUser());
 
-// teamviewfilters-author-rohithm
+// Team View Filters
 export const getFeatureFlags = () => {
-  let teams: string[] = [];
-  let queuesStatsList: string[] = [];
 
-  // Get all configured teams and queues
-  const teamList = mergedSettings?.common?.teamList || {};
-  const queuesList = mergedSettings?.common?.queuesList || {};
+    let queuesStatsList: string[] = [];
+  const teams = mergedSettings?.common?.teams || [];
+    const queuesList = mergedSettings?.common?.queuesList || {};
 
-  // Ignore location and roles completely
-  teams = Object.values(teamList).flat() as string[];
-  queuesStatsList = Object.values(queuesList).flat() as string[];
+    queuesStatsList = Object.values(queuesList).flat() as string[];
+    console.log('[Team View Filters] Teams:', teams);
 
-  console.log('[Team View Filters] All Teams:', teams);
-  console.log('[Team View Filters] All Queues:', queuesStatsList);
-
-  // Update merged settings
   mergedSettings.common.teams = teams;
-  mergedSettings.common.queuesStatsList = queuesStatsList;
+    mergedSettings.common.queuesStatsList = queuesStatsList;
 
   return mergedSettings;
 };
