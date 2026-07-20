@@ -29,7 +29,7 @@ import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 export const teamFilter = () =>
   ({
-    id: 'data.attributes.team_name',
+    id: 'data.attributes.pcs_team',
     title: (Manager.getInstance().strings as any)[StringTemplates.Team],
     fieldName: 'teams',
     options: getTeamOptions()
@@ -42,5 +42,5 @@ export const teamFilter = () =>
       field: <SelectFilter IsMulti={true} />,
       label: <SelectFilterLabel />,
     },
-    condition: 'IN',
+    condition: 'CONTAINS',
   } as FilterDefinition);
