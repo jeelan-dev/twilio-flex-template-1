@@ -64,7 +64,7 @@ export const queueNoWorkerDataFilter = async () => {
     fieldName: 'queue',
     customStructure: {
       label: <SelectFilterLabel />,
-      field: <SelectFilter IsMulti={true} />,
+      field: <SelectFilter IsMulti={false} />,
     },
     options: sortBy(options, ['label']),
     condition: 'IN',
