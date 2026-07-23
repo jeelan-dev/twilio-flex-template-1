@@ -1640,6 +1640,9 @@ var appConfig = {
       ],
     },
     features: {
+      recover_non_graceful_disconnect: {
+        enabled: true,
+      },
       embedded_insights_dashboards: {
         enabled: true,
         workspace_uri: '/gdc/workspaces/cfwqkednqj571z1wa1aaxwh9nt6pz9l6',

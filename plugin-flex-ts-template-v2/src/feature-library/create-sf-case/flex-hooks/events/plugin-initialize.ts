@@ -9,12 +9,20 @@ export const eventName = FlexEvent.pluginsInitialized;//FlexEvent.taskAccepted;
 export const eventHook = async function initializeSalesforceOpenCtiscript(
   flex: typeof Flex,
   manager: Flex.Manager,
-  //task: Flex.ITask,//sunil - remove   
 ) {
-  // your code here
+  // Register notification for case creation failures (shown to agent on SF errors)
+  (manager.strings as any).CaseCreationFailed =
+    '⚠️ Salesforce case creation failed: {{reason}}. Please create the case manually.';
+  Flex.Notifications.registerNotification({
+    id: 'CaseCreationFailed',
+    type: Flex.NotificationType.error,
+    content: 'CaseCreationFailed',
+    timeout: 10000, // Auto-dismiss after 10 seconds
+  });
+
   const sfdcBaseUrl = window.location.ancestorOrigins[0]
-  console.log('create-sf-case initialize called - sfdcBaseUrl'+sfdcBaseUrl);
-  console.log('create-sf-case initialize called - CallChannel'+JSON.stringify(flex.DefaultTaskChannels.Call));
+  console.log('[create-sf-case] Initialize called - sfdcBaseUrl: ' + sfdcBaseUrl);
+  console.log('[create-sf-case] Initialize called - CallChannel: ' + JSON.stringify(flex.DefaultTaskChannels.Call));
 
   const callChannel = flex.DefaultTaskChannels.Call
   if (callChannel?.templates?.TaskListItem) {
